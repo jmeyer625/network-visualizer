@@ -108,7 +108,7 @@ var sphere = new THREE.Mesh(geometry,new THREE.MeshPhongMaterial({color:0xFF0000
 
 
 var initData = [];
-for (var i=0; i<30; i++) {
+for (var i=0; i<40; i++) {
 	initData.push(Faker.Helpers.createCard());
 }
 
@@ -140,9 +140,13 @@ _.map(initData,function(person,ind) {
 	newData.push(personData);
 })
 
-var centralities = calcCentrality(newData,10);
+var centralities = calcCentrality(newData,20);
 _.map(centralities,function(num,ind){
 	newData[ind].centrality = num.toFixed(4);
+})
+
+newData = _.sortBy(newData,function(node){
+	return 1/Number(node.centrality);
 })
 
 _.map(newData,function(person,ind){
