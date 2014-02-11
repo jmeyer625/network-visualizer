@@ -102,7 +102,7 @@ var mapLine = function(node1,node2) {
 var controller = init();
 
 var geometry = new THREE.SphereGeometry(1,25,25);
-var material = new THREE.MeshPhongMaterial( { color: 0x2ADDA4 } );
+var material = new THREE.MeshPhongMaterial( { color: 0xEA76F7} );
 var sphere = new THREE.Mesh(geometry,new THREE.MeshPhongMaterial({color:0xFF0000}));
 // scene.add(sphere);
 
@@ -132,12 +132,17 @@ _.map(initData,function(person,ind) {
 	for(var j=0; j<person.friends.length; j++) {
 		personData.connectionArray[person.friends[j]] = 1;
 	}
+	personData.friends = person.friends;
+	personData.words = [];
+	for (var i=0; i<3; i++){
+		personData.words.push(person.posts[i].sentence);  
+	}
 	newData.push(personData);
 })
 
 var centralities = calcCentrality(newData,10);
 _.map(centralities,function(num,ind){
-	newData[ind].centrality = num;
+	newData[ind].centrality = num.toFixed(4);
 })
 
 _.map(newData,function(person,ind){
@@ -166,3 +171,8 @@ _.map(newData,function(node){
     scene.add(pointLight);
 
 render();
+
+
+var tableTemplate = Handlebars.compile($('#tableTemplate').text());
+
+$('#tableBody').append($(tableTemplate(newData)));
