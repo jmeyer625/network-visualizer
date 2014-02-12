@@ -315,6 +315,7 @@ $(function(){
 		$('table').fadeToggle();
 		setTimeout(function(){
 			$('#showTable').text(($('table').css('display') === 'none') ? "Show table" : "Hide table");
+			$('.table-container').css('overflow',($('table').css('display') === 'none') ? "auto" : "scroll");
 		}, 500)
 		
 	})
