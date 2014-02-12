@@ -1,3 +1,35 @@
 body {
 	background-color: white;
 }
+
+.table-node-row:hover td {
+	cursor: pointer;
+	background-color: #008CBA;
+	color: white;
+}
+
+ul {
+	list-style-type: none;
+	font-size: 14px;
+}
+
+canvas {
+	border: 1px solid black;
+}
+
+.row {
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+
+table {
+	width: 100%;
+}
+
+td {
+	vertical-align: middle;
+}
+
+td ul {
+	margin: 0;
+}
