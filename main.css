@@ -38,6 +38,10 @@ canvas {
 	padding: 0 10px;
 }
 
+.friend-tab {
+	width: 200px;
+}
+
 td {
 	vertical-align: middle;
 }

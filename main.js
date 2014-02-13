@@ -1,6 +1,6 @@
 
 
-var init = function(){
+var init = function(elem){
 	scene = new THREE.Scene();
 	camera = new THREE.PerspectiveCamera( 75, 400 / 400, 0.1, 1000 );
 	camera.position.z = 50;
@@ -11,7 +11,7 @@ var init = function(){
 	pointLight = new THREE.PointLight(0xFFFFFF); // Set the color of the light source (white).
     pointLight.position.set(50, 50, 250); // Position the light source at (x, y, z).
     scene.add(pointLight);
-	$('#view').append( renderer.domElement );
+	$(elem).append( renderer.domElement );
 	return {scene:scene,camera:camera,renderer:renderer,pointLight:pointLight}	
 }
 
@@ -47,6 +47,7 @@ var toCartesian = function(object) {
 	var z = object.radius * Math.cos(object.theta);
 	return {x:x,y:y,z:z}
 }
+
 
 var initBVector = function(dataMatrix){
 	var arr = [];
@@ -111,9 +112,9 @@ var calcSphereCoords = function(node,ind) {
 	var xOffset = quadrants[ind%8].x
 	var yOffset = quadrants[ind%8].y;
 	var zOffset = quadrants[ind%8].z;
-	var xCoord = node.centrality ? xOffset / node.centrality : 0;
-	var yCoord = node.centrality ? yOffset / node.centrality : 0;
-	var zCoord = node.centrality ? zOffset / node.centrality : 0;
+	var xCoord = node.centrality ? xOffset * 3 / node.centrality : 0;
+	var yCoord = node.centrality ? yOffset * 3 / node.centrality : 0;
+	var zCoord = node.centrality ? zOffset * 3/ node.centrality : 0;
 	return { xCoord:xCoord, yCoord:yCoord, zCoord:zCoord }
 }
 
@@ -130,11 +131,7 @@ var makeEdges = function(dataMatrix) {
 	return dataMatrix;
 }
 
-var mapLine = function(node1,node2) {
-	var startVector = node1.position;
-	var endVector = node2.position;
-	var middlePosition = calcMiddle(startVector,endVector);
-	var middleVector = new THREE.Vector3(middlePosition.x,middlePosition.y,middlePosition.z);
+var constructLine = function(startVector,middleVector,endVector) {
 	var spline = new THREE.SplineCurve3([
 	   startVector,
 	   middleVector,
@@ -147,46 +144,57 @@ var mapLine = function(node1,node2) {
 	    lineGeometry.vertices.push(splinePoints[i]);  
 	}
 	var line = new THREE.Line(lineGeometry,lineMaterial);
+	return line;
+}
+
+var mapLine = function(node1,node2) {
+	var startVector = node1.position;
+	var endVector = node2.position;
+	var middlePosition = calcMiddle(startVector,endVector);
+	var middleVector = new THREE.Vector3(middlePosition.x,middlePosition.y,middlePosition.z);
+	var line = constructLine(startVector,middleVector,endVector);
 	scene.add(line);
 	return line;
 }
 
-var makeFriendData = function(dataSize) {
+var addFriend = function(node, dataMatrix) {
+	var newFriend = Math.floor(Math.random()*dataMatrix.length)
+	if (newFriend !== node.id && node.connectionArray[newFriend] === 0) {
+		node.friends.push(dataMatrix[newFriend].name);
+		node.connectionArray[newFriend] = 1;
+		dataMatrix[newFriend].connectionArray[node.id] = 1;
+		dataMatrix[newFriend].friends.push(node.name);
+	}
+}
+
+var addProperties = function(node, dataMatrix) {
+	node.connectionArray = [];
+	for(var i=0; i<dataMatrix.length; i++) {
+		node.connectionArray.push(0);
+	}
+	node.friends = [];
+	node.on = false;
+	node.edges=[];	
+}
+
+var makeNodeData = function(dataSize) {
 	var dataMatrix = [];
 	for (var i=0; i<dataSize; i++) {
 		dataMatrix.push(Faker.Helpers.createCard());
 	}
-	_.map(dataMatrix,function(node,ind){
+	_.map(dataMatrix,function(node, ind){
+		addProperties(node, dataMatrix);
 		node.id = ind;
-		node.on = false;
-		node.friends = [];
-		var numFriends = Math.floor(Math.random()*dataMatrix.length/4+1);
+	})
+	_.map(dataMatrix,function(node,ind){
+		var numFriends = Math.floor(Math.random()*dataMatrix.length/7+1);
 		for (var i=0; i<numFriends; i++) {
-			var newFriend = Math.floor(Math.random()*dataMatrix.length)
-			if (newFriend !== ind) {
-				node.friends.push(dataMatrix[newFriend].name);
-			}
+			addFriend(node, dataMatrix);	
 		}
 	});
-
 	for (var i=0; i < dataMatrix.length; i++) {
 		dataMatrix[i].community = i;
 	}
-
-	_.map(dataMatrix,function(node,ind) {
-		node.connectionArray = [];
-		for(var i=0; i<dataMatrix.length; i++) {
-			node.connectionArray.push(0);
-		}
-		for(var j=0; j<node.friends.length; j++) {
-			var friendInd = _.find(dataMatrix,function(otherNode){
-				return otherNode.name === node.friends[j];
-			})
-			node.connectionArray[friendInd.id] = 1;
-		}
-		node.edges=[];
-		
-	})
 	return dataMatrix
 }
 
@@ -219,28 +227,30 @@ var makeGraph = function(dataMatrix, scene) {
 	return initData
 }
 
-var makeNodeLabel = function(node){
-	var canvas1 = document.createElement('canvas');
-	canvas1.width = 100;
-	canvas1.height = 50;
-	var context1 = canvas1.getContext('2d');
-	context1.font = "Bold 10px Arial";
-	context1.fillStyle = "rgba(255,0,0,0.95)";
-	context1.fillText(node.name, 0, 20);
+var makeFontTexture = function(text) {
+	var canvas = document.createElement('canvas');
+	canvas.width = 150;
+	canvas.height = 50;
+	var context = canvas.getContext('2d');
+	context.font = "Bold 10px Arial";
+	context.fillStyle = "rgba(255,0,0,0.95)";
+	context.fillText(text, 0, 20);
+	return canvas
+}
 
-	// canvas contents will be used for a texture
-	var texture1 = new THREE.Texture(canvas1) 
-	texture1.needsUpdate = true;
-	  
-	var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
-	material1.transparent = true;
+var makeNodeLabel = function(node){
+	var fontTexture = makeFontTexture(node.name);
+	var texture = new THREE.Texture(fontTexture); 
+	texture.needsUpdate = true;  
+	var material = new THREE.MeshBasicMaterial( {map: texture, side:THREE.DoubleSide } );
+	material.transparent = true;
 	var position = node.sphere.position;
-	var mesh1 = new THREE.Mesh(
+	var mesh = new THREE.Mesh(
 	    new THREE.PlaneGeometry(20, 10),
-	    material1
+	    material
 	  );
-	mesh1.position.set(position.x,position.y,position.z);
-	node.label = mesh1;
+	mesh.position.set(position.x,position.y,position.z);
+	node.label = mesh;
 }
 
 var makeNodeLabels = function(dataMatrix) {
@@ -291,7 +301,6 @@ var checkOtherCommunities = function(dataMatrix) {
 	var maxModularity = [dataMatrix,calcModularity(dataMatrix)];
 	for (var i=0; i < dataMatrix.length; i++) {
 		var testModularity = testNodeCommunities(maxModularity[0],i);
-		console.log(testModularity,maxModularity)
 		if(testModularity[1]>maxModularity[1]) {
 			maxModularity = testModularity;
 		}
@@ -369,17 +378,12 @@ var checkArraysEqual = function(arr1,arr2) {
 	
 }
 
-var drawCommunities = function(communityArray, scene) {
-	for (var i=0; i<communityArray.length; i++) {
-		makeGraph(communityArray[i], scene);
-	}
-}
 
 
 $(function(){
 	var scene, camera, renderer, controls, pointLight;
-	var threeObj = init(scene, camera, renderer, controls, pointLight);
-	var initData = makeFriendData(20);
+	var threeObj = init('#view');
+	var initData = makeNodeData(20);
 	initData = makeGraph(initData, threeObj.scene);
 	render();
 
@@ -389,7 +393,7 @@ $(function(){
 	$(document).on('click','#newData',function(e){
 		e.preventDefault();
 		clearScene(threeObj.scene);
-		initData = makeFriendData(20);
+		initData = makeNodeData(20);
 		initData = makeGraph(initData, threeObj.scene);
 		render();
 		$('#tableBody').html('');
@@ -398,7 +402,7 @@ $(function(){
 
 	$(document).on('click','.icon-button',function(){
 		clearScene(threeObj.scene);
-		initData = makeFriendData(20);
+		initData = makeNodeData(20);
 		initData = makeGraph(initData, threeObj.scene);
 		render();
 		$('#tableBody').html('');
@@ -465,7 +469,8 @@ $(function(){
 	});
 
 	$(document).on('click','#groupCommunities',function(){
-		checkOtherCommunities(initData);
+		initData = checkOtherCommunities(initData);
+		var communityMaster = drawCommunities(getCommunities(initData), initData);
 		$('#tableBody').html('');
 		$('#tableBody').append($(tableTemplate(initData)))
 	})
