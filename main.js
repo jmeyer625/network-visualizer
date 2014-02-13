@@ -169,6 +169,10 @@ var makeFriendData = function(dataSize) {
 		}
 	});
 
+	for (var i=0; i < dataMatrix.length; i++) {
+		dataMatrix[i].community = i;
+	}
+
 	_.map(dataMatrix,function(node,ind) {
 		node.connectionArray = [];
 		for(var i=0; i<dataMatrix.length; i++) {
@@ -273,7 +277,8 @@ var calcModularity = function(dataMatrix) {
 	}
 	for (var i=0; i<dataMatrix.length; i++) {
 		for (var j=0; j<dataMatrix[i].connectionArray.length; j++) {
-			sum += (dataMatrix[i].connectionArray[j] - (dataMatrix[i].k + dataMatrix[j].k)/m);
+			var sameCommunity = dataMatrix[i].community === dataMatrix[j].community ? 1 : 0;
+			sum += ((dataMatrix[i].connectionArray[j] - (dataMatrix[i].k * dataMatrix[j].k)/m)*(sameCommunity));
 		}
 	}
 	var q = constant * sum;
@@ -282,14 +287,93 @@ var calcModularity = function(dataMatrix) {
 }
 
 var checkOtherCommunities = function(dataMatrix) {
-	for node in nodes {
-		getConnectedNodes(node);
-		for connectedNode {
-			
+	
+	var maxModularity = [dataMatrix,calcModularity(dataMatrix)];
+	for (var i=0; i < dataMatrix.length; i++) {
+		var testModularity = testNodeCommunities(maxModularity[0],i);
+		console.log(testModularity,maxModularity)
+		if(testModularity[1]>maxModularity[1]) {
+			maxModularity = testModularity;
 		}
+
 	}
+
+	return maxModularity[0];	
 }
 
+var testNodeCommunities = function(dataMatrix,ind){
+	var node = dataMatrix[ind];
+	var nodesToCheck = getConnectedNodes(node, dataMatrix);
+	var maxModularity = null;
+	for (var i=0; i<nodesToCheck.length; i++) {
+		node.community = nodesToCheck[i].community;
+		var communityArray = getCommunity(nodesToCheck[i], dataMatrix);
+		var modularity = calcModularity(dataMatrix);
+		if (maxModularity) {
+			if (modularity > maxModularity[1]) {
+				maxModularity = [];
+				maxModularity.push(dataMatrix);
+				maxModularity.push(modularity);
+			}
+		} else {
+			maxModularity = [];
+			maxModularity.push(dataMatrix);
+			maxModularity.push(modularity);
+		}
+	}
+	// console.log(maxModularity);
+	return maxModularity;
+}
+
+var getCommunity = function(node,dataMatrix){
+	var community = [];
+	community = _.filter(dataMatrix,function(item){
+		return node.community === item.community;
+	})
+	return community
+}
+
+var getCommunities = function(dataMatrix) {
+	var communities = [];
+	for (var i=0; i<dataMatrix.length; i++) {
+		var thisCommunity = getCommunity(dataMatrix[i], dataMatrix);
+		if (communities.length) {
+			var arrayExists = null
+			for (var j=0; j<communities.length; j++) {
+				if(checkArraysEqual(thisCommunity,communities[j])) {
+					arrayExists = true;
+					break;
+				}
+			}
+			if(!arrayExists) {
+				communities.push(thisCommunity);
+			}
+		} else {
+			communities.push(thisCommunity)
+		}
+	}
+	return communities;
+}
+
+var checkArraysEqual = function(arr1,arr2) {
+	if(arr1.length === arr2.length) {
+		for (var i=0; i<arr1.length; i++) {
+			if(arr2.indexOf(arr1[i]) === -1) {
+				return false;
+			}
+		}
+		return true;
+	} else {
+		return false;
+	}
+	
+}
+
+var drawCommunities = function(communityArray, scene) {
+	for (var i=0; i<communityArray.length; i++) {
+		makeGraph(communityArray[i], scene);
+	}
+}
 
 
 $(function(){
@@ -378,6 +462,12 @@ $(function(){
 			
 		}
 		
+	});
+
+	$(document).on('click','#groupCommunities',function(){
+		checkOtherCommunities(initData);
+		$('#tableBody').html('');
+		$('#tableBody').append($(tableTemplate(initData)))
 	})
 
 })

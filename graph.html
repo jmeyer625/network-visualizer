@@ -24,8 +24,9 @@
 
       <li id="newData"><a href="#">Generate new graph</a></li>
       <li><a id="showTable" class="button">Show table</a></li>
+      <li><a id="groupCommunities" class="button">Group by community</a></li>
       <li class="name user-profile">
-    	<img src="profile.jpg" class="profile-pic">
+    	<img src="images/profile.jpg" class="profile-pic">
 		<p>Jake Meyer</p>
     </li>
     </ul>
@@ -48,6 +49,7 @@
 						<th class="text-center">Name</th>
 						<th class="text-center">Friends</th>
 						<th class="text-center">Centrality</th>
+						<th class="text-center">Community</th>
 					</tr>
 				</thead>
 				<tbody id="tableBody">
@@ -59,16 +61,16 @@
 	</div>
 	<div class="row">
 		<div class="large-3 columns">
-			<img src="twitter-icon.png" class="icon-button">
+			<img src="images/twitter-icon.png" class="icon-button">
 		</div>
 		<div class="large-3 columns">
-			<img src="facebook-icon.svg" class="icon-button">			
+			<img src="images/facebook-icon.svg" class="icon-button">			
 		</div>
 		<div class="large-3 columns">
-			<img src="linkedin-icon.png" class="icon-button">
+			<img src="images/linkedin-icon.png" class="icon-button">
 		</div>
 		<div class="large-3 columns">
-			<img src="pinterest-icon.png" class="icon-button">
+			<img src="images/pinterest-icon.png" class="icon-button">
 		</div>
 	</div>
 	<script type="x-handlebars-template" id="tableTemplate">
@@ -81,6 +83,7 @@
 					<li>{{this}}</li>
 				{{/each}}</ul>
 			<td class="text-center">{{this.centrality}}</td>
+			<td class="text-center">{{this.community}}</td>
 		</tr>
 	{{/each}}
 
