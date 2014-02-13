@@ -14,14 +14,20 @@
     <li class="name">
       <h1><a href="#">Network Visualizer</a></h1>
     </li>
+    
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>
 
   <section class="top-bar-section">
     <!-- Right Nav Section -->
     <ul class="right">
+
       <li id="newData"><a href="#">Generate new graph</a></li>
-      <li><a id="showTable">Show table</a></li>
+      <li><a id="showTable" class="button">Show table</a></li>
+      <li class="name user-profile">
+    	<img src="profile.jpg" class="profile-pic">
+		<p>Jake Meyer</p>
+    </li>
     </ul>
 
     <!-- Left Nav Section -->
@@ -42,7 +48,6 @@
 						<th class="text-center">Name</th>
 						<th class="text-center">Friends</th>
 						<th class="text-center">Centrality</th>
-						<th class="text-center">Words</th>
 					</tr>
 				</thead>
 				<tbody id="tableBody">
@@ -53,14 +58,19 @@
    		</div>
 	</div>
 	<div class="row">
-		<div class="large-9 columns">
-			
-			
+		<div class="large-3 columns">
+			<img src="twitter-icon.png" class="icon-button">
 		</div>
 		<div class="large-3 columns">
+			<img src="facebook-icon.svg" class="icon-button">			
+		</div>
+		<div class="large-3 columns">
+			<img src="linkedin-icon.png" class="icon-button">
+		</div>
+		<div class="large-3 columns">
+			<img src="pinterest-icon.png" class="icon-button">
 		</div>
 	</div>
-	
 	<script type="x-handlebars-template" id="tableTemplate">
 	{{#each this}}
 		
@@ -71,7 +81,6 @@
 					<li>{{this}}</li>
 				{{/each}}</ul>
 			<td class="text-center">{{this.centrality}}</td>
-			<td class="text-center">{{#each this.posts}}{{this}}</td>{{/each}}
 		</tr>
 	{{/each}}
 

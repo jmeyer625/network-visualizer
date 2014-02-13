@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="normalize.css">
+	<link rel="stylesheet" type="text/css" href="foundation.min.css">
+		<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+
+<nav class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="#">Network Visualizer</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+    <ul class="right">
+      <!-- <li id="newData"><a href="#">Generate new graph</a></li> -->
+      <li><a id="signUp" class="button" data-reveal-id="signInModal">Sign in</a></li>
+      <li><a id="signUp" class="button success" data-reveal-id="signUpModal">Sign up</a></li>
+    </ul>
+
+    <!-- Left Nav Section -->
+    <ul class="left">
+    </ul>
+  </section>
+</nav>
+
+
+	<div class="row">
+		<div class="large-12 columns text-center">
+			<ul class="example-orbit" data-orbit>
+			  
+			  <li>
+			    <img src="network-graph.png" alt="slide 2" class="slide-image"/>
+			    <div class="orbit-caption">
+			      Visualize.
+			    </div>
+			    </li>
+			   <li>
+			    <img src="wordCloud.jpg" alt="slide 1" class="slide-image"/>
+			    <div class="orbit-caption">
+			      Analyze.
+			    </div>
+			  </li>
+			  <li>
+			    <img src="big-data-image.jpg" alt="slide 3" class="slide-image"/>
+			    <div class="orbit-caption">
+			      Connect.
+			    </div>
+			  </li>
+			</ul>
+			<h1>See your social world.</h1>
+			<a href="graph.html" class="button large demo">Demo</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-12 columns">
+			<hr>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-5 columns">
+			<img src="Twitter.jpg" class="network-img">
+		</div>
+		<div class="large-7 columns">
+			<h2 class="main-img-caption">Upload data from a social networking site.</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-7 columns">
+			<h2 class="main-img-caption">See your connections and your connections' connections.</h2>
+		</div>
+		<div class="large-5 columns">
+			<img src="facebook.jpg" class="network-img">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-5 columns">
+			<img src="pinterest.jpg" class="network-img">
+		</div>
+		<div class="large-7 columns">
+			<h2 class="main-img-caption">Analyze and learn.</h2>
+		</div>
+	</div>
+		
+	<div id="signUpModal" class="reveal-modal small" data-reveal>
+	  <form>
+	  	<div class="row">
+	  		<div class="large-6 columns">
+	  			<label>First name:
+	  				<input type="text" placeholder="First name" autofocus>
+	  			</label>
+	  		</div>
+	  		<div class="large-6 columns">
+	  		<label>Last name:
+	  				<input type="text" placeholder="Last name">
+	  			</label>
+	  		</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="large-6 columns">
+	  			<label>E-mail:
+	  				<input type="text" placeholder="E-mail">
+	  			</label>
+	  		</div>
+	  		<div class="large-6 columns">
+	  		<label>Password:
+	  				<input type="text" placeholder="Password">
+	  			</label>
+	  		</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="large-2 columns">
+	  			<img src="twitter-icon.png" class="icon">
+	  		</div>
+	  		<div class="large-6 columns">
+	  			<label>Username:
+	  				<input type="text" placeholder="Username">
+	  			</label>
+	  		</div>
+	  		<div class="large-4 columns">
+	  		<label>Password:
+	  				<input type="text" placeholder="Password">
+	  			</label>
+	  		</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="large-2 columns">
+	  			<img src="facebook-icon.svg" class="icon">
+	  		</div>
+	  		<div class="large-6 columns">
+	  			<label>Username:
+	  				<input type="text" placeholder="Username">
+	  			</label>
+	  		</div>
+	  		<div class="large-4 columns">
+	  		<label>Password:
+	  				<input type="text" placeholder="Password">
+	  			</label>
+	  		</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="large-2 columns">
+	  			<img src="linkedin-icon.png" class="icon">
+	  		</div>
+	  		<div class="large-6 columns">
+	  			<label>Username:
+	  				<input type="text" placeholder="Username">
+	  			</label>
+	  		</div>
+	  		<div class="large-4 columns">
+	  		<label>Password:
+	  				<input type="text" placeholder="Password">
+	  			</label>
+	  		</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="large-2 columns">
+	  			<img src="pinterest-icon.png" class="icon">
+	  		</div>
+	  		<div class="large-6 columns">
+	  			<label>Username:
+	  				<input type="text" placeholder="Username">
+	  			</label>
+	  		</div>
+	  		<div class="large-4 columns">
+	  		<label>Password:
+	  				<input type="text" placeholder="Password">
+	  			</label>
+	  		</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="large-12 columns">
+	  			<a class="button expand" href="graph.html">Submit</a>
+	  		</div>
+	  	</div>
+	</div>
+
+	<div id="signInModal" class="reveal-modal small" data-reveal>
+	  <form>
+	  	<div class="row">
+	  		<div class="large-6 columns">
+	  			<label>E-mail:
+	  				<input type="text" placeholder="E-mail" autofocus>
+	  			</label>
+	  		</div>
+	  		<div class="large-6 columns">
+	  		<label>Password:
+	  				<input type="text" placeholder="Password">
+	  			</label>
+	  		</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="large-12 columns">
+	  			<a class="button expand" href="graph.html">Submit</a>
+	  		</div>
+	  	</div>
+	  </form>
+	</div>
+
+	<div class="footer">
+		<div class="row">
+			<div class="large-12 columns footer-div">
+				<p>&#169; 2014</p>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="foundation-5.1.1/js/foundation.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+	<script type="text/javascript" src="landing.js"></script>
+	<script type="text/javascript">
+		$(document).foundation({
+			orbit: {
+				timer_speed: 3000,
+				resume_on_mouseout: true,
+			}
+		});
+	</script>	
+</body>
+</html>

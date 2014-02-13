@@ -245,6 +245,51 @@ var makeNodeLabels = function(dataMatrix) {
 	})
 }
 
+var calcM = function(dataMatrix) {
+	var m = 0
+	for (var i=0; i<dataMatrix.length; i++) {
+		for (var j=0; j<dataMatrix[i].connectionArray.length; j++) {
+			m += dataMatrix[i].connectionArray[j]
+		}
+	}
+	return m;
+}
+
+var calcK = function(node) {
+	var k = 0;
+	for(var j=0; j<node.connectionArray.length; j++) {
+		k += node.connectionArray[j];
+	}
+	return k;
+}
+
+var calcModularity = function(dataMatrix) {
+	var m = calcM(dataMatrix)
+	var constant = 1/m;
+	var sum = 0;
+	for (var i=0; i<dataMatrix.length; i++) {
+		var k = calcK(dataMatrix[i]);
+		dataMatrix[i].k = k;
+	}
+	for (var i=0; i<dataMatrix.length; i++) {
+		for (var j=0; j<dataMatrix[i].connectionArray.length; j++) {
+			sum += (dataMatrix[i].connectionArray[j] - (dataMatrix[i].k + dataMatrix[j].k)/m);
+		}
+	}
+	var q = constant * sum;
+	return q;
+
+}
+
+var checkOtherCommunities = function(dataMatrix) {
+	for node in nodes {
+		getConnectedNodes(node);
+		for connectedNode {
+			
+		}
+	}
+}
+
 
 
 $(function(){
@@ -267,6 +312,15 @@ $(function(){
 		$('#tableBody').append($(tableTemplate(initData)));
 	})
 
+	$(document).on('click','.icon-button',function(){
+		clearScene(threeObj.scene);
+		initData = makeFriendData(20);
+		initData = makeGraph(initData, threeObj.scene);
+		render();
+		$('#tableBody').html('');
+		$('#tableBody').append($(tableTemplate(initData)));
+	})
+
 	$(document).on('click','.table-node-row',function(){
 		
 		var id = parseInt($(this).attr('data-id'));
@@ -274,7 +328,6 @@ $(function(){
 			return node.id === id;
 		})
 		var edges = node.edges;
-		console.log(threeObj.scene);
 		if (!node.on) {
 			node.sphere.material.color.setHex(0xEA76F7);
 			_.map(edges,function(edge){
@@ -312,11 +365,18 @@ $(function(){
 	});
 
 	$(document).on('click', '#showTable',function(){
-		$('table').fadeToggle();
-		setTimeout(function(){
-			$('#showTable').text(($('table').css('display') === 'none') ? "Show table" : "Hide table");
-			$('.table-container').css('overflow',($('table').css('display') === 'none') ? "auto" : "scroll");
-		}, 500)
+		if($('table').css('display')==='none') {
+			$('.table-container').addClass('scrollbar');
+			$('table').fadeIn(function(){
+				$('#showTable').text(($('table').css('display') === 'none') ? "Show table" : "Hide table");
+			})
+		} else {
+			$('table').fadeOut(function(){
+				$('#showTable').text(($('table').css('display') === 'none') ? "Show table" : "Hide table");
+				$('.table-container').removeClass('scrollbar');
+			})
+			
+		}
 		
 	})
 

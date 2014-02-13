@@ -2,6 +2,9 @@ body {
 	background-color: white;
 }
 
+table {
+	width: 100%;
+}
 .table-node-row:hover td {
 	cursor: pointer;
 	background-color: #008CBA;
@@ -27,10 +30,102 @@ canvas {
 	height: 400px;
 }
 
+.scrollbar {
+	overflow: scroll;
+}
+
+.top-bar {
+	padding: 0 10px;
+}
+
 td {
 	vertical-align: middle;
 }
 
 td ul {
 	margin: 0;
+}
+
+.network-img {
+	display: inline-block;
+	width: 300px;
+	height: 300px;
+	border: 10px solid #008cba;
+	border-radius: 150px;
+
+}
+
+.main-img-caption {
+	display: table-cell;
+	vertical-align: middle;
+	height: 300px;
+}
+
+.network-line1 {
+	height: 10px;
+	width: 390px;
+	background-color: #008cba;
+	position: absolute;
+	-webkit-transform: rotate(30deg);
+	position: absolute;
+
+}
+
+.network-line2 {
+	height: 10px;
+	width: 390px;
+	background-color: #008cba;
+	position: absolute;
+	-webkit-transform: rotate(-30deg);
+	position: absolute;
+	top: 1300px;
+	left: 435px;
+}
+
+.icon {
+	height: 50px;
+	margin-top: 8px;
+}
+
+.slide-image {
+	height: 290px;
+	width: 100%;
+}
+
+.footer {
+	background-color: #008cba;
+	height: 300px;
+	color: white;
+}
+
+.footer-div {
+	margin-top: 50px;
+}
+
+.profile-pic {
+	width: 45px;
+	margin-top: 4px;
+}
+
+.user-profile {
+	padding: 0 5px;
+}
+
+.user-profile * {
+	display: inline-block;
+	color: white;
+	font-size: 14px;
+}
+
+.user-profile:hover {
+	background-color: #008cba;
+	cursor: pointer;
+}
+
+.right li {
+	margin-right: 20px;
+}
+
+.icon-button:hover {
+	cursor: pointer;
 }
