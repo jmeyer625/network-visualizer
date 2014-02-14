@@ -27,7 +27,8 @@ canvas {
 
 .table-container {
 	width: 100%;
-	height: 400px;
+	height: 300px;
+	text-align: center;
 }
 
 .scrollbar {
@@ -36,10 +37,6 @@ canvas {
 
 .top-bar {
 	padding: 0 10px;
-}
-
-.friend-tab {
-	width: 200px;
 }
 
 td {

@@ -1,11 +1,9 @@
-
-
 var init = function(elem){
 	scene = new THREE.Scene();
-	camera = new THREE.PerspectiveCamera( 75, 400 / 400, 0.1, 1000 );
+	camera = new THREE.PerspectiveCamera( 75, 970 / 400, 0.1, 1000 );
 	camera.position.z = 50;
 	renderer = new THREE.WebGLRenderer();
-	renderer.setSize( 400, 400 );
+	renderer.setSize( 970, 400 );
 	renderer.setClearColor(0xFFFFFF);
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	pointLight = new THREE.PointLight(0xFFFFFF); // Set the color of the light source (white).
@@ -112,9 +110,9 @@ var calcSphereCoords = function(node,ind) {
 	var xOffset = quadrants[ind%8].x
 	var yOffset = quadrants[ind%8].y;
 	var zOffset = quadrants[ind%8].z;
-	var xCoord = node.centrality ? xOffset * 3 / node.centrality : 0;
-	var yCoord = node.centrality ? yOffset * 3 / node.centrality : 0;
-	var zCoord = node.centrality ? zOffset * 3/ node.centrality : 0;
+	var xCoord = node.centrality ? xOffset * 2 / node.centrality : 0;
+	var yCoord = node.centrality ? yOffset * 2 / node.centrality : 0;
+	var zCoord = node.centrality ? zOffset * 2/ node.centrality : 0;
 	return { xCoord:xCoord, yCoord:yCoord, zCoord:zCoord }
 }
 
@@ -296,7 +294,7 @@ var calcModularity = function(dataMatrix) {
 
 }
 
-var checkOtherCommunities = function(dataMatrix) {
+var louvainLoop = function() {
 	
 	var maxModularity = [dataMatrix,calcModularity(dataMatrix)];
 	for (var i=0; i < dataMatrix.length; i++) {
@@ -453,14 +451,14 @@ $(function(){
 	});
 
 	$(document).on('click', '#showTable',function(){
-		if($('table').css('display')==='none') {
+		if($('#tableRow').css('display')==='none') {
 			$('.table-container').addClass('scrollbar');
-			$('table').fadeIn(function(){
-				$('#showTable').text(($('table').css('display') === 'none') ? "Show table" : "Hide table");
+			$('#tableRow').fadeIn(function(){
+				$('#showTable').text(($('#tableRow').css('display') === 'none') ? "Show table" : "Hide table");
 			})
 		} else {
-			$('table').fadeOut(function(){
-				$('#showTable').text(($('table').css('display') === 'none') ? "Show table" : "Hide table");
+			$('#tableRow').fadeOut(function(){
+				$('#showTable').text(($('#tableRow').css('display') === 'none') ? "Show table" : "Hide table");
 				$('.table-container').removeClass('scrollbar');
 			})
 			
